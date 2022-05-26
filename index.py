@@ -36,13 +36,14 @@ labelEnFrame.place(x=0,y=0)
 
 background = Label(image = imagen, text = "Imagen S.O de fondo")
 background.place(x = 0, y = 0, relwidth = 1, relheight = 1)
-boton = Button(ventanaPrincipal,text='')
+ 
+img = PhotoImage(file='/home/baruch/Documentos/GitHub/ProyectoPOOE/media/circle.png')
+dwnd = img.subsample(32) #with 250, I ended up running out of memory
+boton = Button(ventanaPrincipal, image=dwnd, command=None, borderwidth = 0)
+
+boton.pack(pady=10)
 boton.place(x=3000/2, y=1570/2)
-boton.pack(
-    ipadx=5,
-    ipady=5,
-    expand=True
-)
+
 
 
 
