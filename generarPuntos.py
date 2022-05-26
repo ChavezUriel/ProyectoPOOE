@@ -28,7 +28,7 @@ def mollweide_plot(pos):
     ax.axis(False)
 
     pos_moll=ang_to_mollweide(pos.T[0],pos.T[1])
-    ax.plot(pos_moll[0],pos_moll[1],".",color="white",markersize=1)
+    ax.plot(pos_moll[0],pos_moll[1],".",color="black",markersize=1)
 
     x=np.linspace(-1,1,1001)
     contour=np.sqrt(1-x**2)/2

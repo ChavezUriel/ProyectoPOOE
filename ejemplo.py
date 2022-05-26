@@ -2,9 +2,24 @@ from tkinter import *
 from PIL import ImageTk, Image
 import modules as md
 
+def imprimirNombre():
+    print('Bienvenido al mundo del sida')
+
+def imprimirMensajeIngresado():
+    labelPrincipal['text']=cajaTexto.get()
 colors = ['gray','black','white']
+
 ventanaPrincipal = Tk(className='Ventana en Python')
+
+#Agregar un titilo en la ventana
+ventanaPrincipal.title("Titulo de la interfaz.")
+#Bloquear redimensionar ventana
 ventanaPrincipal.resizable(0,0)
+#Tamaño de ventana
+
+#Icono de ventana
+# ventanaPrincipal.iconbitmap(('/home/baruch/Documentos/GitHub/POOE/GraphicInterphase/inoco.ico'))
+#Fodno
 imagen = ImageTk.PhotoImage(Image.open('/home/baruch/Documentos/GitHub/ProyectoPOOE/media/plotBackground.png'))
 # # Con Label y la opción image, puedes mostrar una imagen en el widget:
 background = Label(image = imagen, text = "Imagen S.O de fondo")
@@ -30,19 +45,19 @@ imageFrame = ImageTk.PhotoImage(Image.open('/home/baruch/Documentos/GitHub/POOE/
 labelEnFrame = Label(principalFrame, image=imageFrame)
 labelEnFrame.place(x=0,y=0)
 
+#Botones
+segLabelPrin = Label(ventanaPrincipal, text = 'CARRERA')
+segLabelPrin.pack()
+boton = Button(ventanaPrincipal,text='descarga Juegos sin viruz', command=imprimirNombre)
+boton.pack()
+
+cajaTexto = Entry(ventanaPrincipal)
+cajaTexto.pack()
+
+boton2 = Button(ventanaPrincipal,text = 'descarga aquí :D', command=imprimirMensajeIngresado)
+boton2.pack()
 
 
-##########  Grafica Mollweide con Botones ##########
-
-background = Label(image = imagen, text = "Imagen S.O de fondo")
-background.place(x = 0, y = 0, relwidth = 1, relheight = 1)
-boton = Button(ventanaPrincipal,text='')
-boton.place(x=3000/2, y=1570/2)
-boton.pack(
-    ipadx=5,
-    ipady=5,
-    expand=True
-)
 
 
 
