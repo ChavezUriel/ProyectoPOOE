@@ -67,6 +67,6 @@ def graf_3D(pos):
 puntos = rand_sphere(100)
 
 #graficamos en proyección mollweide y 3D
-mollweide_plot(puntos)
-graf_3D(puntos)
+# mollweide_plot(puntos)
+# graf_3D(puntos)
 
