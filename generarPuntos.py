@@ -30,7 +30,6 @@ def positions(npoints):
 
 # Grafica los puntos en proyección mollweide
 def mollweide_plot(pos):
-    print(pos)
     fig = plt.figure(dpi=150)
     ax = fig.add_subplot(111)
     ax.axis("equal")
@@ -73,10 +72,10 @@ def graf_3D(pos):
     plt.show()
 
 # generamos 100 puntos
-puntos = rand_sphere(100)
+# puntos = rand_sphere(100)
 
 #graficamos en proyección mollweide y 3D
-mollweide_plot(puntos)
+# mollweide_plot(puntos)
 # graf_3D(puntos)
 
 
