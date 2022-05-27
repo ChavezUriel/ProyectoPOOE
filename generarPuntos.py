@@ -1,3 +1,4 @@
+#%%
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
@@ -20,8 +21,16 @@ def ang_to_mollweide(phi,theta):
     y = theta / np.pi
     return x,y
 
+def positions(npoints):
+    pos = rand_sphere(npoints)
+    pos_moll=ang_to_mollweide(pos.T[0],pos.T[1])
+    x = pos_moll[0]
+    y = pos_moll[1]
+    return x,y
+
 # Grafica los puntos en proyección mollweide
 def mollweide_plot(pos):
+    print(pos)
     fig = plt.figure(dpi=150)
     ax = fig.add_subplot(111)
     ax.axis("equal")
@@ -67,6 +76,8 @@ def graf_3D(pos):
 puntos = rand_sphere(100)
 
 #graficamos en proyección mollweide y 3D
-# mollweide_plot(puntos)
+mollweide_plot(puntos)
 # graf_3D(puntos)
 
+
+# %%
