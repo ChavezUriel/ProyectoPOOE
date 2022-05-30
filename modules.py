@@ -1,2 +1,2 @@
-import generarPuntos as gen 
+import puntos as gen 
 

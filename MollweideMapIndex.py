@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import modules as md
-import generarPuntos as gen
+import puntos as gen
 from functools import partial
 
 

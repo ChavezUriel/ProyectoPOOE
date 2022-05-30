@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 #import ipympl
 
 #%matplotlib widget
-plt.style.use('dark_background')
+
 
 # Genera puntos homogéneamente sobre una esfera, entrega en coordenadas (phi, theta)
 def rand_sphere(npt):
@@ -30,19 +30,21 @@ def positions(npoints):
 
 # Grafica los puntos en proyección mollweide
 def mollweide_plot(pos):
+    plt.style.use('dark_background')
     fig = plt.figure(dpi=150)
     ax = fig.add_subplot(111)
     ax.axis("equal")
     ax.axis(False)
 
     pos_moll=ang_to_mollweide(pos.T[0],pos.T[1])
-    ax.plot(pos_moll[0],pos_moll[1],".",color="black",markersize=1)
+    ax.plot(pos_moll[0],pos_moll[1],".",color="white",markersize=1)
 
     x=np.linspace(-1,1,1001)
     contour=np.sqrt(1-x**2)/2
     ax.plot(x,contour,x,-contour,color="white",linewidth=0.5)
 
     plt.show()
+    plt.style.use('default')
 
 # Transforma coordenadas (phi,theta) a (x,y,z) para graficar en esfera 3D
 def ang_to_xyz(phi,theta):
@@ -53,6 +55,7 @@ def ang_to_xyz(phi,theta):
 
 # Grafica los puntos en esfera 3D
 def graf_3D(pos):
+    plt.style.use('dark_background')
     fig = plt.figure(dpi=150)
     ax = fig.add_subplot(111, projection='3d')
 
@@ -70,6 +73,7 @@ def graf_3D(pos):
     ax.set_box_aspect([1,1,1])
 
     plt.show()
+    plt.style.use('default')
 
 # generamos 100 puntos
 # puntos = rand_sphere(100)
