@@ -190,7 +190,7 @@ class galmenos(oamenos):
 
 # Genera lista de objetos astronómicos con opción a fijar la 
 # cantidad de cada tipo de objeto que se requiera.
-def generarObjetos(n_objetos, custom = False, n_qsomas=0, n_qsomenos=0, n_galmas=0, n_galmenos=0):
+def generarObjetos(n_objetos=0, custom=False, n_qsomas=0, n_qsomenos=0, n_galmas=0, n_galmenos=0):
     
     lista_objetos = []
 
