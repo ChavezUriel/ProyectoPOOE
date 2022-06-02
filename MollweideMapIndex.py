@@ -1,7 +1,4 @@
 from tkinter import *
-from typing import Literal
-from PIL import ImageTk, Image
-import modules as md
 import objast as oa
 import puntos as gen
 from functools import partial
@@ -107,6 +104,7 @@ class details():
         df1 = df1[['wavelengths','espectro']].groupby('wavelengths').sum() 
         df1.plot(kind='line', legend=True, ax=ax1)#'-k'
         ax1.set_title('Wavelengths Vs. espectro')
+        self.ventanaPrincipal.mainloop()
 
 
 def main():
