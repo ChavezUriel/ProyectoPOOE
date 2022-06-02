@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KernelDensity
+from pandas import DataFrame
 
 # A partir de los datos de los coeficientes de la expansión 
 # de datos reales en la base de PCAs, obtiene distribuciones
@@ -255,4 +256,22 @@ def construir_espectro(objeto):
     plt.xlabel(r'Longitud de onda${\rm (\AA)}$')
     plt.show()
 
+def datos_espectro(objeto):
+    plt.style.use('default')
+    coeff = objeto.espectro
+    generador = generadores[objeto.tipo_espectro]
+    z = objeto.z
+    evecs = generador["evecs"]
+    spec_mean = generador["spec_mean"]
+    wavelengths = 10**logwave/(1+z)
+    
+    fig = plt.figure(figsize=(6, 2))
+    fig.subplots_adjust(hspace=0, top=0.95, bottom=0.1, left=0.12, right=0.93)
+    
+    espectro = spec_mean + np.dot(coeff[:n_components], evecs[:n_components])
+    
+    data1 = {'wavelengths': wavelengths,
+                'espectro': espectro}
+    df = DataFrame(data1,columns=['wavelengths','espectro'])
+    return df
 
