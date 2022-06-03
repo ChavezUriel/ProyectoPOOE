@@ -143,6 +143,7 @@ class oamenos(objast):
 class qsomas(oamas):
     def __init__(self, *args, **kwargs):
         self.espectro = self.generarEspectro()
+        self.tipo_objeto = "QSO+"
         self.tipo_espectro = "QSO+"
         super(qsomas,self).__init__(*args, **kwargs)
     
@@ -155,6 +156,7 @@ class qsomas(oamas):
 class qsomenos(oamenos):
     def __init__(self, *args, **kwargs):
         self.espectro = self.generarEspectro()
+        self.tipo_objeto = "QSO-"
         self.tipo_espectro = "QSO-"
         super(qsomenos,self).__init__(*args, **kwargs)
     
@@ -167,6 +169,7 @@ class qsomenos(oamenos):
 class galmas(oamas):
     def __init__(self, *args, **kwargs):
         self.espectro = self.generarEspectro()
+        self.tipo_objeto = "GAL+"
         self.tipo_espectro = "GAL"
         super(galmas,self).__init__(*args, **kwargs)
     
@@ -179,6 +182,7 @@ class galmas(oamas):
 class galmenos(oamenos):
     def __init__(self, *args, **kwargs):
         self.espectro = self.generarEspectro()
+        self.tipo_objeto = "GAL-"
         self.tipo_espectro = "GAL"
         super(galmenos,self).__init__(*args, **kwargs)
     
@@ -255,4 +259,41 @@ def construir_espectro(objeto):
     plt.xlabel(r'Longitud de onda${\rm (\AA)}$')
     plt.show()
 
+# Reconstruye un espectro
+def plotrecons(objeto):
+    coeff = objeto.espectro
+    generador = generadores[objeto.tipo_espectro]
+    z = objeto.z
+    evecs = generador["evecs"]
+    spec_mean = generador["spec_mean"]
+    wavelengths = 10**logwave/(1+z)
+    
+    spec = spec_mean + np.dot(coeff[:n_components], evecs[:n_components])
+    
+    iters = (np.array([0, 0.1, 0.25, 0.5, 1])*n_components).astype(int)
+    
+    fig = plt.figure(figsize=(6, 14))
+    fig.subplots_adjust(hspace=0, top=0.95, bottom=0.1, left=0.12, right=0.93)
+    
+    for i, n in enumerate(iters):
+        ax = fig.add_subplot(911 + i)
+        ax.plot(wavelengths, spec, '-', c='gray')
+        ax.plot(wavelengths, spec_mean + np.dot(coeff[:n], evecs[:n]), '-k')
 
+        if i < 3:
+            ax.xaxis.set_major_formatter(plt.NullFormatter())
+
+        ax.set_ylim(-10, 25)
+        ax.set_ylabel('flux')
+
+        if n == 0:
+            text = "mean"
+        elif n == 1:
+            text = "mean + 1 component\n"
+        else:
+            text = "mean + %i components\n" % n
+
+        ax.text(0.02, 0.93, text, ha='left', va='top', transform=ax.transAxes)
+
+    fig.axes[-1].set_xlabel(r'${\rm wavelength\ (\AA)}$')
+    plt.show()
