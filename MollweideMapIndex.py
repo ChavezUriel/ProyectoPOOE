@@ -1,4 +1,5 @@
 from tkinter import *
+from turtle import color
 import objast as oa
 import puntos as gen
 from functools import partial
@@ -153,15 +154,14 @@ class details():
         self.EspecDisplay.pack()
         self.EspecDisplay.place(x=250,y=90)
         df1 = oa.datos_espectro(lista_objetos)
-        figure1 = plt.Figure(figsize=(5,5), dpi=100)
+        figure1 = plt.Figure(figsize=(5,4), dpi=100)
         ax1 = figure1.add_subplot(111)
-        bar1 = FigureCanvasTkAgg(figure1, self.EspecDisplay)
-        bar1.get_tk_widget().pack(side=LEFT, fill=BOTH)
-        df1 = df1[['wavelengths','espectro']].groupby('wavelengths').sum() 
-        df1.plot(kind='line', legend=True, ax=ax1)#'-k'
         ax1.set_title('Wavelengths Vs. espectro')
-
-
+        bar1 = FigureCanvasTkAgg(figure1, self.EspecDisplay)
+        bar1.get_tk_widget().pack()
+        df1 = df1[['wavelengths','espectro']].groupby('wavelengths').sum() 
+        df1.plot(kind='line', legend=False, ax=ax1, color= 'black')#'-k'
+        
         
         self.detalles.mainloop()
     

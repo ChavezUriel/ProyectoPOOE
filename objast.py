@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KernelDensity
+import puntos as pn
 from pandas import DataFrame
 
 # A partir de los datos de los coeficientes de la expansión 
@@ -298,3 +299,65 @@ def plotrecons(objeto):
 
     fig.axes[-1].set_xlabel(r'${\rm wavelength\ (\AA)}$')
     plt.show()
+
+
+
+    
+def construirUnespectro(objeto):
+    plt.style.use('default')
+    coeff = objeto.espectro
+    generador = generadores[objeto.tipo_espectro]
+    z = objeto.z
+    evecs = generador["evecs"]
+    spec_mean = generador["spec_mean"]
+    wavelengths = 10**logwave/(1+z)
+    
+    fig = plt.figure(figsize=(6, 2))
+    fig.subplots_adjust(hspace=0, top=0.95, bottom=0.1, left=0.12, right=0.93)
+    
+    espectro = spec_mean + np.dot(coeff[:n_components], evecs[:n_components])
+    return pd.DataFrame([wavelengths,espectro],columns=['wavelengths','espectro'])
+        
+def oneGraf_3D(pos,n):
+    plt.style.use('dark_background')
+    fig = plt.figure(dpi=150)
+    ax = fig.add_subplot(111, projection='3d')
+
+    x,y,z = pn.ang_to_xyz(pos.T[0],pos.T[1])
+
+
+    ax.scatter(x[n], y[n], z[n], marker="o",color='red')
+    x = np.delete(x, n)
+    y = np.delete(y, n)
+    z = np.delete(z, n)
+    ax.scatter(x, y, z, marker=".")
+    u, v = np.mgrid[0:2*np.pi:30j, 0:np.pi:15j]
+    x = 0.99*np.cos(u)*np.sin(v)
+    y = 0.99*np.sin(u)*np.sin(v)
+    z = 0.99*np.cos(v)
+    ax.plot_wireframe(x, y, z, color="w", alpha=0.2)
+
+    ax.axis(False)
+    ax.set_box_aspect([1,1,1])
+
+    plt.show()
+    plt.style.use('default')
+
+def datos_espectro(objeto):
+    plt.style.use('default')
+    coeff = objeto.espectro
+    generador = generadores[objeto.tipo_espectro]
+    z = objeto.z
+    evecs = generador["evecs"]
+    spec_mean = generador["spec_mean"]
+    wavelengths = 10**logwave/(1+z)
+
+    fig = plt.figure(figsize=(6, 2))
+    fig.subplots_adjust(hspace=0, top=0.95, bottom=0.1, left=0.12, right=0.93)
+
+    espectro = spec_mean + np.dot(coeff[:n_components], evecs[:n_components])
+
+    data1 = {'wavelengths': wavelengths,
+                'espectro': espectro}
+    df = DataFrame(data1,columns=['wavelengths','espectro'])
+    return df
