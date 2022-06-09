@@ -1,4 +1,5 @@
 #%%
+from turtle import color
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
@@ -72,15 +73,43 @@ def graf_3D(pos):
     ax.axis(False)
     ax.set_box_aspect([1,1,1])
 
-    plt.show()
+    # plt.show()
     plt.style.use('default')
+
+def oneGraf_3D(pos,n):
+    plt.style.use('dark_background')
+    fig = plt.figure(dpi=150)
+    
+    ax = plt.axes(projection='3d')
+    plt.close(1)
+    # ax = plt.figure(dpi=150).add_subplot(111, projection='3d')
+
+    x,y,z = ang_to_xyz(pos.T[0],pos.T[1])
+
+    
+    ax.scatter(x[n], y[n], z[n], marker="o",color='red')
+    x = np.delete(x, n)
+    y = np.delete(y, n)
+    z = np.delete(z, n)
+    ax.scatter(x, y, z, marker=".")
+    u, v = np.mgrid[0:2*np.pi:30j, 0:np.pi:15j]
+    x = 0.99*np.cos(u)*np.sin(v)
+    y = 0.99*np.sin(u)*np.sin(v)
+    z = 0.99*np.cos(v)
+    ax.plot_wireframe(x, y, z, color="w", alpha=0.2)
+    
+    ax.axis(False)
+    ax.set_box_aspect([1,1,1])
+
+    
+    plt.show()
 
 # generamos 100 puntos
 # puntos = rand_sphere(100)
 
 #graficamos en proyección mollweide y 3D
-# mollweide_plot(puntos)
-# graf_3D(puntos)
+# # mollweide_plot(puntos)
+# oneGraf_3D(puntos,3)
 
 
 # %%
