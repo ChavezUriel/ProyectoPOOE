@@ -298,7 +298,7 @@ def plotrecons(objeto):
         ax.text(0.02, 0.93, text, ha='left', va='top', transform=ax.transAxes)
 
     fig.axes[-1].set_xlabel(r'${\rm wavelength\ (\AA)}$')
-    plt.show()
+    # plt.show()
 
 
 
@@ -318,30 +318,6 @@ def construirUnespectro(objeto):
     espectro = spec_mean + np.dot(coeff[:n_components], evecs[:n_components])
     return pd.DataFrame([wavelengths,espectro],columns=['wavelengths','espectro'])
         
-def oneGraf_3D(pos,n):
-    plt.style.use('dark_background')
-    fig = plt.figure(dpi=150)
-    ax = fig.add_subplot(111, projection='3d')
-
-    x,y,z = pn.ang_to_xyz(pos.T[0],pos.T[1])
-
-
-    ax.scatter(x[n], y[n], z[n], marker="o",color='red')
-    x = np.delete(x, n)
-    y = np.delete(y, n)
-    z = np.delete(z, n)
-    ax.scatter(x, y, z, marker=".")
-    u, v = np.mgrid[0:2*np.pi:30j, 0:np.pi:15j]
-    x = 0.99*np.cos(u)*np.sin(v)
-    y = 0.99*np.sin(u)*np.sin(v)
-    z = 0.99*np.cos(v)
-    ax.plot_wireframe(x, y, z, color="w", alpha=0.2)
-
-    ax.axis(False)
-    ax.set_box_aspect([1,1,1])
-
-    plt.show()
-    plt.style.use('default')
 
 def datos_espectro(objeto):
     plt.style.use('default')

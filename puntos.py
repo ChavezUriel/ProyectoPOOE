@@ -73,13 +73,16 @@ def graf_3D(pos):
     ax.axis(False)
     ax.set_box_aspect([1,1,1])
 
-    plt.show()
+    # plt.show()
     plt.style.use('default')
 
 def oneGraf_3D(pos,n):
     plt.style.use('dark_background')
     fig = plt.figure(dpi=150)
-    ax = fig.add_subplot(111, projection='3d')
+    
+    ax = plt.axes(projection='3d')
+    plt.close(1)
+    # ax = plt.figure(dpi=150).add_subplot(111, projection='3d')
 
     x,y,z = ang_to_xyz(pos.T[0],pos.T[1])
 
@@ -94,12 +97,12 @@ def oneGraf_3D(pos,n):
     y = 0.99*np.sin(u)*np.sin(v)
     z = 0.99*np.cos(v)
     ax.plot_wireframe(x, y, z, color="w", alpha=0.2)
-
+    
     ax.axis(False)
     ax.set_box_aspect([1,1,1])
 
+    
     plt.show()
-    plt.style.use('default')
 
 # generamos 100 puntos
 # puntos = rand_sphere(100)

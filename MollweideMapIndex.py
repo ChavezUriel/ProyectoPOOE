@@ -5,6 +5,7 @@ import puntos as gen
 from functools import partial
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+from PIL import Image, ImageTk
 
 
 
@@ -17,39 +18,82 @@ class Map():
         self.ventanaPrincipal = Tk(className='Mapa de objetos astronómicos')
         self.dimVentana = [1500,800]
         self.ventanaPrincipal.geometry(str(self.dimVentana[0])+'x'+str(self.dimVentana[1]))
-        self.colors = ['gray','black','white']
+        #Color de fondo
+        self.ventanaPrincipal.config(bg='white')
         self.ventanaPrincipal.resizable(0,0)
-        self.segLabelPrin = Label(self.ventanaPrincipal, text = 'CARRERA')
-        self.segLabelPrin.pack()
-        self.boton = Button(self.ventanaPrincipal,text='descarga Juegos sin viruz')
-        self.boton.pack()
-        ## Frame del mapa ##
-        self.principalFrame = Frame()
-        self.principalFrame.pack()
-        self.principalFrame.config(width=1100, height=505)
-        self.principalFrame.config(bg='black',borderwidth=1)
+        
+        
+        ##########  Barra superior ##########
+        self.TopBg = Frame(self.ventanaPrincipal)
+        self.TopBg.config(bg='dimgray',highlightbackground = "black", highlightcolor= "black")
+        self.TopBg.place(x=0,y=0)
+        self.TopBg.config(width=1500, height=80)
+        self.TopBg.pack()
+        self.TopBar = Frame(self.ventanaPrincipal)
+        self.TopBar.pack()
+        self.TopBar.place(x=50,y=10)
+        self.TopBar.config(width=770, height=707)
+        self.Titulo = Label(self.TopBar, text=('Generador de objetos astronómicos'), bg='white', fg='white')
+        self.Titulo.config(font=("Times", 30))
+        self.Titulo.config(bg='dimgray',borderwidth=1)
+        self.Titulo.pack()
 
+        ##########  Panel lateral ##########
+        self.BarraLateral = Frame(self.ventanaPrincipal)
+        self.BarraLateral.pack()
+        self.BarraLateral.config(bg='silver')
+        self.BarraLateral.place(x=15,y=120)
+        self.aplicar = Button(self.BarraLateral,text='Aplicar',bg='gainsboro')
+        self.aplicar.grid(row= 2, column = 2)
+        self.vacio = Label(self.BarraLateral, text = ' ', anchor="e", justify=LEFT,bg='silver')
+        self.vacio.grid(row = 0, column = 0)
+        self.vacio = Label(self.BarraLateral, text = ' ', anchor="e", justify=LEFT,bg='silver')
+        self.vacio.grid(row = 0, column = 5)
+        var1 = IntVar()
+        self.checkButt = Checkbutton(self.BarraLateral, text="Galaxia", variable=var1,bg='silver')
+        self.checkButt.grid(row= 1, column = 1)
+        var2 = IntVar()
+        self.checkButt = Checkbutton(self.BarraLateral, text="QSO+", variable=var2,bg='silver')
+        self.checkButt.grid(row= 2, column = 1)
+        var3 = IntVar()
+        self.checkButt = Checkbutton(self.BarraLateral, text="QSO-", variable=var2,bg='silver')
+        self.checkButt.grid(row= 3, column = 1)
+        self.vacio = Label(self.BarraLateral, text = ' ', anchor="e", justify=LEFT,bg='silver')
+        self.vacio.grid(row = 4, column = 1)
+        self.salir = Label(self.BarraLateral, text = 'Salir del programa', anchor="e", justify=LEFT,bg='silver')
+        self.salir.grid(row = 5, column = 1)
+        self.quitar = Button(self.BarraLateral, text="Quit", command=self.killApp)
+        self.quitar.grid(row= 5, column = 2)
 
+    
 
         ##########  Grafica Mollweide con Botones ##########
 
-
+        ## Frame del mapa ##
+        self.principalFrame = Frame(self.ventanaPrincipal)
+        self.principalFrame.pack()
+        self.principalFrame.config(width=1100, height=505)
+        self.principalFrame.place(x=310,y=155)
+        self.principalFrame.config(bg='black')
 
         def on_click(pos,lista_objetos,nu):
             emergente = details(pos,lista_objetos,nu)
             return 0
 
         
-        self.DimMap = [1366,690]
+        self.DimMap = [1366*0.8,690*0.8]
         self.canvas = Canvas(self.principalFrame, width=self.DimMap[0], height=self.DimMap[1])
-        self.centroMap = [1500/2-85,820/2-65]
+        self.centroMap = [(1500/2-73)*0.8,(820/2-68)*0.8]
         self.canvas.pack()
         # Background Map
-        self.background = PhotoImage(file='media/plotBackground.png').zoom(2)
+        image = Image.open(r"media/plotBackground.png").resize((1093,552))
+        self.background = ImageTk.PhotoImage(image)
         self.background_id = self.canvas.create_image((0, 0), image=self.background, anchor='nw')
-
+        
         # Position of each button
         lista_objetos = oa.generarObjetos(self.n)
+        for i in lista_objetos:
+            print(i.tipo_espectro)
         pos = oa.getpos(lista_objetos)
         self.xpos, self.ypos = gen.ang_to_mollweide(pos.T[0],pos.T[1])
 
@@ -58,20 +102,9 @@ class Map():
         for i in range(self.n):
             self.button = Button(self.principalFrame, image = self.button_img, bg='black',  borderwidth=0,
                             command=partial(on_click, pos,lista_objetos[i],i+1))
-            self.button.place(x=self.centroMap[0]+self.xpos[i]*self.centroMap[0], y=self.centroMap[1]+self.ypos[i]*self.centroMap[1]*1.9)
-
-
+            self.button.place(x=self.centroMap[0]+self.xpos[i]*self.centroMap[0], y=self.centroMap[1]+self.ypos[i]*self.centroMap[1]*1.98)
 
         
-        #Color de fondo
-        self.ventanaPrincipal.config(bg='gray')
-        #Loop para mantener ejecutando la ventana
-
-        # #   Ventana emergente con los detalles
-        # def details():
-        #     emergente = details()
-
-        Button(self.ventanaPrincipal, text="Quit", command=self.killApp).pack()
         self.ventanaPrincipal.mainloop()
     def killApp(self):
             self.ventanaPrincipal.quit()
@@ -84,7 +117,6 @@ class details():
         self.detalles = Tk(className='Mapa de objetos astronómicos')
         self.dimVentana = [800,600]
         self.detalles.geometry(str(self.dimVentana[0])+'x'+str(self.dimVentana[1]))
-        self.colors = ['gray','black','white']
         self.detalles.resizable(0,0)
         
 
@@ -103,51 +135,75 @@ class details():
         self.Titulo.config(bg='LightSkyBlue1',borderwidth=1)
         self.Titulo.pack()
 
+        # Panel Lateral
+        self.panelLateral = Frame(self.detalles)
 
-
-        #Atributos del objeto astronomico:
-        self.detTit = Frame(self.detalles)
+            #Atributos del objeto astronomico:
+        self.detTit = Frame(self.panelLateral)
+        self.detTit.grid(row = 0, column = 0)
         self.detTit.pack()
-        self.detTit.place(x=40,y=90)
         self.Titulo = Label(self.detTit, text=('Información técnica'))
         self.Titulo.config(font=("TimesNewRoman", 16))
         self.Titulo.config(bg='Azure3',borderwidth=1)
         self.Titulo.pack()
         self.BarraDetalles = Frame(self.detalles)
+        self.datosObj = Label(self.BarraDetalles, text = 'Datos del objeto', anchor="e", justify=LEFT,bg='white')
+        self.datosObj.grid(row = 0, column = 0)
+        self.datosObjVal = Label(self.BarraDetalles, text = self.numeroDeObjeto, anchor="e", justify=LEFT,bg='white')
+        self.datosObjVal.grid(row = 0, column = 1)
+        self.datosObj = Label(self.BarraDetalles, text = 'RA,DEC: ', anchor="e", justify=LEFT,bg='white')
+        self.datosObj.grid(row = 1, column = 0)
+        self.datosObjVal = Label(self.BarraDetalles, text = lista_objetos.RA_DEC.round(4), anchor="e", justify=LEFT,bg='white')
+        self.datosObjVal.grid(row = 1, column = 1)
+        self.datosObj = Label(self.BarraDetalles, text = 'Redshift: ', anchor="e", justify=LEFT,bg='white')
+        self.datosObj.grid(row = 2, column = 0)
+        self.datosObjVal = Label(self.BarraDetalles, text = lista_objetos.z.round(4), anchor="e", justify=LEFT,bg='white')
+        self.datosObjVal.grid(row = 2, column = 1)
+        self.datosObj = Label(self.BarraDetalles, text = 'Tipo de espectro: ', anchor="e", justify=LEFT,bg='white')
+        self.datosObj.grid(row = 3, column = 0)
+        self.datosObjVal = Label(self.BarraDetalles, text = lista_objetos.tipo_espectro, anchor="e", justify=LEFT,bg='white')
+        self.datosObjVal.grid(row = 3, column = 1)
+        # self.BarraDetalles.grid(row = 1, column = 0)
         self.BarraDetalles.pack()
         self.BarraDetalles.place(x=40,y=120)
         self.BarraDetalles.config(width=100, height=400)
-        self.BarraDetalles.config(bg='black',borderwidth=1,highlightbackground = "black", highlightcolor= "black")
-        atributos = ('Datos del objeto'+str(self.numeroDeObjeto)+':\n'+
-                    'RA,DEC: '+str(lista_objetos.RA_DEC)+'\n'+
-                    'z: '+str(lista_objetos.z)+'\n'+
-                    'Tipo de espectro: '+str(lista_objetos.tipo_espectro))
-        self.atrib = Label(self.BarraDetalles, text = atributos, anchor="e", justify=LEFT)
-        self.atrib.pack()
+        self.BarraDetalles.config(bg='white',borderwidth=1,highlightbackground = "white", highlightcolor= "white")
 
         # Barra de opciones:
         self.opcTit = Frame(self.detalles)
+        # self.opcTit.grid(row = 2, column = 0)
         self.opcTit.pack()
-        self.opcTit.place(x=40,y=210)
+        self.opcTit.place(x=50,y=220)
         self.Titulo = Label(self.opcTit, text=('Opciones:'))
         self.Titulo.config(font=("TimesNewRoman", 16))
         self.Titulo.config(bg='Azure3',borderwidth=1)
         self.Titulo.pack()
-        self.OpsBg = Frame(self.detalles)
-        self.OpsBg.pack()
-        self.OpsBg.place(x=40,y=240)
-        self.OpsBg.config(width=200, height=100)
-        self.OpsBg.config(bg='white',borderwidth=1,highlightbackground = "black", highlightcolor= "black")
+        # self.OpsBg = Frame(self.detalles)
+        # self.OpsBg.pack()
+        # self.OpsBg.place(x=40,y=240)
+        # self.OpsBg.config(width=200, height=100)
+        # self.OpsBg.config(bg='white',borderwidth=1,highlightbackground = "black", highlightcolor= "black")
+
+        #Panel de opciones
         self.Ops = Frame(self.detalles)
+        self.Map3D = Button(self.Ops, text="Ubicación en mapa 3D", command=self.Map3dim, bg = 'gainsboro')
+        self.Map3D.grid(row = 0, column = 0)
+        self.descri = Label(self.Ops, text=('*despliega una grafica en 3D que \nrepresenta la bobeda celeste y los \nobjetos observados en ella. El objeto \n seleccionado aparecerá de color rojo.'))
+        self.descri.config(font=("TimesNewRoman", 7),bg= 'white')
+        self.descri.grid(row = 1, column = 0)
+        self.quitarDetalles = Button(self.Ops, text="Regresar a mapa", command=self.closeWin, bg = 'gainsboro')
+        self.quitarDetalles.grid(row = 2, column = 0)
+        self.descri = Label(self.Ops, text=('**Regresa al mapa con todos los objetos.'))
+        self.descri.config(font=("TimesNewRoman", 7),bg= 'white')
+        self.descri.grid(row = 3, column = 0)
         self.Ops.pack()
         self.Ops.place(x=50,y=250)
         self.Ops.config(width=100, height=400)
-        self.OpsBg.config(bg='white',borderwidth=1,highlightbackground = "black", highlightcolor= "black")
-            # Botones:
-        self.Map3D = Button(self.Ops, text="Ubicación en mapa 3D", command=self.Map3dim).pack()
-        ############ Agregar texto entre botones
-        self.quitarDetalles = Button(self.Ops, text="Regresar a mapa", command=self.closeWin).pack()
-        self.atrib.pack()
+        self.Ops.config(bg='white',borderwidth=1,highlightbackground = "black", highlightcolor= "black")
+        
+        self.panelLateral.pack()
+        self.panelLateral.place(x=40,y=90)
+        
 
         #   Grafica de espectros
         self.EspecDisplay = Frame(self.detalles)
@@ -166,11 +222,12 @@ class details():
         self.detalles.mainloop()
     
     def Map3dim(self):
-            gen.oneGraf_3D(self.pos,self.numeroDeObjeto-1)
+        
+        gen.oneGraf_3D(self.pos,self.numeroDeObjeto-1)
 
     def closeWin(self):
-            self.detalles.destroy()
-            self.detalles.quit()
+        self.detalles.destroy()
+        self.detalles.quit()
     
 
 
