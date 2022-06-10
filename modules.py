@@ -1,2 +1,0 @@
-import puntos as gen 
-
