@@ -1,0 +1,3 @@
+Este programa genera un conjunto de objetos astronómicos que simulan las observaciones de observatorios que se dedican a la espectrografía de galaxias y cuásares.
+Los objetos se generan de manera homogénea sobre la bóveda celeste con distribuciones en corrimiento al rojo y razón entre cuásares y galaxias basados en datos de observaciones reales del proyecto SDSS. Para cada objeto también se genera un espectro, cuya generación también se basa en datos experimentales reales, se realizó un análisis de componentes principales de tres categorías de objetos, galaxias en general, cuásares con corrimiento al rojo menor a 2.1 y mayor a 2.1.
+Toda esta información de cada objeto se muestra de forma resumida y gráfica dando click sobre alguno de ellos.
